@@ -27,6 +27,15 @@ function DetaillerProjet({ project, onCancel, onEdit }) {
         </span>
       ))}
     </div>
+        <div className="button-row">
+      <button className="button-secondary" type="button" onClick={onCancel}>
+        Annuler
+      </button>
+
+      <button className="button" type="button" onClick={onEdit}>
+        Éditer
+      </button>
+    </div>
   </section> 
   )
 }
