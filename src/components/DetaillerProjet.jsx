@@ -20,6 +20,13 @@ function DetaillerProjet({ project, onCancel, onEdit }) {
         <strong>{project.year}</strong>
       </div>
     </div>
+        <div className="detail-tech-list">
+      {project.technologies.map((technology) => (
+        <span key={technology} className="chip">
+          {technology}
+        </span>
+      ))}
+    </div>
   </section> 
   )
 }
