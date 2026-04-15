@@ -9,6 +9,10 @@ const EMPTY_FORM = {
   description: '',
 }
 
+const YEAR_MIN = 1900
+const YEAR_MAX = 2100
+const MIN_DESCRIPTION_LENGTH = 20
+
 function toFormValues(project) {
   if (!project) {
     return EMPTY_FORM
@@ -24,6 +28,54 @@ function toFormValues(project) {
       : '',
     description: project.description ?? '',
   }
+}
+
+function parseTechnologies(value) {
+  return value
+    .split(',')
+    .map((technology) => technology.trim())
+    .filter(Boolean)
+}
+
+function validateForm(values) {
+  const errors = {}
+  const year = values.year.trim()
+  const yearAsNumber = Number(year)
+  const technologies = parseTechnologies(values.technologies)
+  const description = values.description.trim()
+
+  if (!values.title.trim()) {
+    errors.title = 'Le libelle du projet est obligatoire.'
+  }
+
+  if (!values.image.trim()) {
+    errors.image = "L'URL ou le chemin de l'image est obligatoire."
+  }
+
+  if (!values.category.trim()) {
+    errors.category = 'La categorie est obligatoire.'
+  }
+
+  if (!year) {
+    errors.year = "L'annee est obligatoire."
+  } else if (!Number.isInteger(yearAsNumber) || year.length !== 4) {
+    errors.year = "L'annee doit contenir 4 chiffres."
+  } else if (yearAsNumber < YEAR_MIN || yearAsNumber > YEAR_MAX) {
+    errors.year = `L'annee doit etre comprise entre ${YEAR_MIN} et ${YEAR_MAX}.`
+  }
+
+  if (technologies.length === 0) {
+    errors.technologies =
+      'Ajoute au moins une technologie (separee par des virgules).'
+  }
+
+  if (!description) {
+    errors.description = 'La description est obligatoire.'
+  } else if (description.length < MIN_DESCRIPTION_LENGTH) {
+    errors.description = `La description doit contenir au moins ${MIN_DESCRIPTION_LENGTH} caracteres.`
+  }
+
+  return errors
 }
 
 function readFileAsDataUrl(file) {
@@ -45,9 +97,11 @@ function AjouterProjet({
   title,
 }) {
   const [formValues, setFormValues] = useState(toFormValues(initialValues))
+  const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
     setFormValues(toFormValues(initialValues))
+    setFormErrors({})
   }, [initialValues])
 
   function handleChange(event) {
@@ -56,10 +110,27 @@ function AjouterProjet({
       ...currentValues,
       [name]: value,
     }))
+
+    setFormErrors((currentErrors) => {
+      if (!currentErrors[name]) {
+        return currentErrors
+      }
+
+      const { [name]: _removedError, ...nextErrors } = currentErrors
+      return nextErrors
+    })
   }
 
   function handleSubmit(event) {
     event.preventDefault()
+    const validationErrors = validateForm(formValues)
+
+    setFormErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) {
+      return
+    }
+
     onSubmit(formValues)
   }
 
@@ -76,6 +147,15 @@ function AjouterProjet({
       ...currentValues,
       image: imageDataUrl,
     }))
+
+    setFormErrors((currentErrors) => {
+      if (!currentErrors.image) {
+        return currentErrors
+      }
+
+      const { image: _removedError, ...nextErrors } = currentErrors
+      return nextErrors
+    })
   }
 
   return (
@@ -88,16 +168,23 @@ function AjouterProjet({
       </p>
 
       <form className="form-grid" onSubmit={handleSubmit}>
+        {Object.keys(formErrors).length > 0 ? (
+          <p className="form-alert">Corrige les champs en erreur puis reessaie.</p>
+        ) : null}
+
         <label htmlFor="title">
           Libelle du projet
           <input
             id="title"
             name="title"
+            aria-invalid={Boolean(formErrors.title)}
             value={formValues.title}
             onChange={handleChange}
             placeholder="Ex : Application de gestion de portfolio"
-            required
           />
+          {formErrors.title ? (
+            <span className="field-error">{formErrors.title}</span>
+          ) : null}
         </label>
 
         <label htmlFor="imageFile">
@@ -115,11 +202,14 @@ function AjouterProjet({
           <input
             id="image"
             name="image"
+            aria-invalid={Boolean(formErrors.image)}
             value={formValues.image}
             onChange={handleChange}
             placeholder="/project-portfolio.svg"
-            required
           />
+          {formErrors.image ? (
+            <span className="field-error">{formErrors.image}</span>
+          ) : null}
         </label>
 
         {formValues.image ? (
@@ -139,11 +229,14 @@ function AjouterProjet({
             <input
               id="category"
               name="category"
+              aria-invalid={Boolean(formErrors.category)}
               value={formValues.category}
               onChange={handleChange}
               placeholder="SPA React"
-              required
             />
+            {formErrors.category ? (
+              <span className="field-error">{formErrors.category}</span>
+            ) : null}
           </label>
 
           <label htmlFor="year">
@@ -151,11 +244,15 @@ function AjouterProjet({
             <input
               id="year"
               name="year"
+              aria-invalid={Boolean(formErrors.year)}
               value={formValues.year}
               onChange={handleChange}
               placeholder="2026"
-              required
+              inputMode="numeric"
             />
+            {formErrors.year ? (
+              <span className="field-error">{formErrors.year}</span>
+            ) : null}
           </label>
         </div>
 
@@ -164,11 +261,14 @@ function AjouterProjet({
           <input
             id="technologies"
             name="technologies"
+            aria-invalid={Boolean(formErrors.technologies)}
             value={formValues.technologies}
             onChange={handleChange}
             placeholder="React, CSS, JSON Server"
-            required
           />
+          {formErrors.technologies ? (
+            <span className="field-error">{formErrors.technologies}</span>
+          ) : null}
         </label>
 
         <label htmlFor="description">
@@ -176,11 +276,14 @@ function AjouterProjet({
           <textarea
             id="description"
             name="description"
+            aria-invalid={Boolean(formErrors.description)}
             value={formValues.description}
             onChange={handleChange}
             placeholder="Decrire le projet, son objectif et ses fonctionnalites."
-            required
           />
+          {formErrors.description ? (
+            <span className="field-error">{formErrors.description}</span>
+          ) : null}
         </label>
 
         <div className="button-row">
