@@ -12,6 +12,14 @@ const EMPTY_FORM = {
 const YEAR_MIN = 1900
 const YEAR_MAX = 2100
 const MIN_DESCRIPTION_LENGTH = 20
+const MAX_IMAGE_SIZE_BYTES = 2 * 1024 * 1024
+const ALLOWED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'image/svg+xml',
+]
 
 function toFormValues(project) {
   if (!project) {
@@ -98,10 +106,13 @@ function AjouterProjet({
 }) {
   const [formValues, setFormValues] = useState(toFormValues(initialValues))
   const [formErrors, setFormErrors] = useState({})
+  const [uploadError, setUploadError] = useState('')
+  const [isReadingImage, setIsReadingImage] = useState(false)
 
   useEffect(() => {
     setFormValues(toFormValues(initialValues))
     setFormErrors({})
+    setUploadError('')
   }, [initialValues])
 
   function handleChange(event) {
@@ -119,6 +130,10 @@ function AjouterProjet({
       const { [name]: _removedError, ...nextErrors } = currentErrors
       return nextErrors
     })
+
+    if (name === 'image') {
+      setUploadError('')
+    }
   }
 
   function handleSubmit(event) {
@@ -141,21 +156,43 @@ function AjouterProjet({
       return
     }
 
-    const imageDataUrl = await readFileAsDataUrl(file)
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setUploadError(
+        "Format non supporte. Utilise JPG, PNG, WEBP, GIF ou SVG.",
+      )
+      return
+    }
 
-    setFormValues((currentValues) => ({
-      ...currentValues,
-      image: imageDataUrl,
-    }))
+    if (file.size > MAX_IMAGE_SIZE_BYTES) {
+      setUploadError('Image trop lourde. Taille maximale: 2 MB.')
+      return
+    }
 
-    setFormErrors((currentErrors) => {
-      if (!currentErrors.image) {
-        return currentErrors
-      }
+    try {
+      setIsReadingImage(true)
+      setUploadError('')
+      const imageDataUrl = await readFileAsDataUrl(file)
 
-      const { image: _removedError, ...nextErrors } = currentErrors
-      return nextErrors
-    })
+      setFormValues((currentValues) => ({
+        ...currentValues,
+        image: imageDataUrl,
+      }))
+
+      setFormErrors((currentErrors) => {
+        if (!currentErrors.image) {
+          return currentErrors
+        }
+
+        const { image: _removedError, ...nextErrors } = currentErrors
+        return nextErrors
+      })
+    } catch {
+      setUploadError(
+        "Impossible de charger l'image. Essaie un autre fichier ou une URL.",
+      )
+    } finally {
+      setIsReadingImage(false)
+    }
   }
 
   return (
@@ -195,6 +232,7 @@ function AjouterProjet({
             onChange={handleImageUpload}
             type="file"
           />
+          {uploadError ? <span className="field-error">{uploadError}</span> : null}
         </label>
 
         <label htmlFor="image">
@@ -287,8 +325,16 @@ function AjouterProjet({
         </label>
 
         <div className="button-row">
-          <button className="button" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Enregistrement...' : submitLabel}
+          <button
+            className="button"
+            type="submit"
+            disabled={isSubmitting || isReadingImage}
+          >
+            {isSubmitting
+              ? 'Enregistrement...'
+              : isReadingImage
+                ? 'Traitement image...'
+                : submitLabel}
           </button>
 
           {onCancel ? (
