@@ -7,6 +7,8 @@ function DetaillerProjet({ project, onCancel, onEdit }) {
       src={project.image}
       alt={`Illustration complète du projet ${project.title}`}
     />
+        <h2>{project.title}</h2>
+    <p>{project.description}</p>
   </section> 
   )
 }
