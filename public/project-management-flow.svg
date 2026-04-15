@@ -1,0 +1,34 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="140" y1="96" x2="1444" y2="802" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D2E5B"/>
+      <stop offset="1" stop-color="#F6B28C"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="#F4F8FF" fill-opacity="0.36"/>
+  <g stroke="#F8FBFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M242 184H418L478 274L418 364H242L182 274L242 184Z"/>
+    <path d="M548 252H742L802 342L742 432H548L488 342L548 252Z"/>
+    <path d="M428 560H628L688 650L628 740H428L368 650L428 560Z"/>
+    <path d="M870 420H1070L1130 510L1070 600H870L810 510L870 420Z"/>
+    <path d="M1184 252H1400L1460 342L1400 432H1184L1124 342L1184 252Z"/>
+  </g>
+  <path d="M478 274H540" stroke="#F8FBFF" stroke-width="16" stroke-linecap="round"/>
+  <path d="M802 342H872" stroke="#F8FBFF" stroke-width="16" stroke-linecap="round"/>
+  <path d="M688 650L860 546" stroke="#F8FBFF" stroke-width="16" stroke-linecap="round"/>
+  <path d="M284 262H380" stroke="#F8FBFF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M286 296H360" stroke="#F8FBFF" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+  <path d="M586 314H706" stroke="#F8FBFF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M586 350H700" stroke="#F8FBFF" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="966" cy="510" r="40" stroke="#F8FBFF" stroke-width="12"/>
+  <path d="M944 510H988" stroke="#F8FBFF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M966 488V532" stroke="#F8FBFF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M472 650H578" stroke="#F8FBFF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M476 686H560" stroke="#F8FBFF" stroke-width="12" stroke-linecap="round" opacity="0.72"/>
+  <text x="240" y="430" fill="#F8FBFF" font-family="Trebuchet MS, Arial" font-size="42" font-weight="700">INITIATING</text>
+  <text x="556" y="498" fill="#F8FBFF" font-family="Trebuchet MS, Arial" font-size="42" font-weight="700">PLANNING</text>
+  <text x="884" y="660" fill="#F8FBFF" font-family="Trebuchet MS, Arial" font-size="42" font-weight="700">EXECUTING</text>
+  <text x="430" y="810" fill="#F8FBFF" font-family="Trebuchet MS, Arial" font-size="38" font-weight="700">CONTROLLING</text>
+  <text x="1208" y="498" fill="#F8FBFF" font-family="Trebuchet MS, Arial" font-size="42" font-weight="700">CLOSING</text>
+</svg>

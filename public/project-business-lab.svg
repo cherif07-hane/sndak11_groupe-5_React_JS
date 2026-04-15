@@ -1,0 +1,40 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#362313"/>
+      <stop offset="1" stop-color="#131C2F"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="396" y1="162" x2="1219" y2="728" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF8"/>
+      <stop offset="1" stop-color="#F1E6D5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="372" y="166" width="860" height="548" rx="28" fill="url(#paper)"/>
+  <rect x="118" y="486" width="456" height="256" rx="26" fill="#0D1930"/>
+  <rect x="150" y="520" width="392" height="182" rx="18" fill="#172A4E"/>
+  <path d="M186 626H274L328 578L398 612L450 548L508 590" stroke="#5FE7FF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="328" cy="578" r="12" fill="#5FE7FF"/>
+  <circle cx="450" cy="548" r="12" fill="#5FE7FF"/>
+  <rect x="434" y="202" width="194" height="18" rx="9" fill="#111E37" fill-opacity="0.22"/>
+  <rect x="434" y="244" width="158" height="18" rx="9" fill="#111E37" fill-opacity="0.18"/>
+  <path d="M466 356V526" stroke="#18243B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M544 420V526" stroke="#18243B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M622 306V526" stroke="#18243B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M700 388V526" stroke="#18243B" stroke-width="8" stroke-linecap="round"/>
+  <path d="M450 526H724" stroke="#18243B" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="880" cy="350" r="94" stroke="#18243B" stroke-width="10"/>
+  <path d="M880 350L944 306" stroke="#18243B" stroke-width="10" stroke-linecap="round"/>
+  <path d="M880 350L838 424" stroke="#18243B" stroke-width="10" stroke-linecap="round"/>
+  <path d="M880 350L790 328" stroke="#18243B" stroke-width="10" stroke-linecap="round"/>
+  <path d="M966 474H1092" stroke="#18243B" stroke-width="10" stroke-linecap="round"/>
+  <path d="M1028 412V536" stroke="#18243B" stroke-width="10" stroke-linecap="round"/>
+  <path d="M900 588C970 532 1042 528 1128 558" stroke="#18243B" stroke-width="10" stroke-linecap="round"/>
+  <rect x="1232" y="126" width="164" height="202" rx="24" fill="#E8D8BF"/>
+  <rect x="1280" y="126" width="116" height="152" rx="24" fill="#F5E8D6"/>
+  <circle cx="1330" cy="704" r="52" fill="#1A2717"/>
+  <circle cx="1330" cy="704" r="30" fill="#60AD64"/>
+  <circle cx="1096" cy="106" r="38" fill="#0A0F1A"/>
+  <circle cx="1096" cy="106" r="26" fill="#1C365F"/>
+  <text x="447" y="642" fill="#0D1930" font-family="Trebuchet MS, Arial" font-size="54" font-weight="700">Atelier Strategie</text>
+</svg>

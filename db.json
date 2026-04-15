@@ -1,0 +1,70 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "title": "Atelier Strategie Portfolio",
+      "image": "/projet1.jpg",
+      "category": "Pilotage",
+      "year": 2026,
+      "technologies": [
+        "React",
+        "CSS",
+        "JSON Server"
+      ],
+      "description": "Espace de pilotage pour organiser les projets d un portefeuille numerique et suivre les priorites visuelles."
+    },
+    {
+      "id": "2",
+      "title": "Innovation Produit Hub",
+      "image": "/projet2.jpg",
+      "category": "Innovation",
+      "year": 2026,
+      "technologies": [
+        "React",
+        "JSX",
+        "Props"
+      ],
+      "description": "Interface de presentation d idees produit avec mise en avant des composants, des cartes et de l affichage conditionnel."
+    },
+    {
+      "id": "4",
+      "title": "Planning Vision",
+      "image": "/projet4.jpg",
+      "category": "Planification",
+      "year": 2025,
+      "technologies": [
+        "Forms",
+        "HTTP",
+        "JSON Server"
+      ],
+      "description": "Tableau de planification inspire d un diagramme de Gantt pour illustrer la persistance et la gestion de formulaire."
+    },
+    {
+      "id": "5",
+      "title": "Cyber Audit Console",
+      "image": "/projet5.png",
+      "category": "Securite",
+      "year": 2025,
+      "technologies": [
+        "React",
+        "Router",
+        "CRUD"
+      ],
+      "description": "Console de demonstration pour lister, consulter et mettre a jour des fiches projet dans un environnement plus technique."
+    },
+    {
+      "id": "6",
+      "title": "Showcase Delivery",
+      "image": "/projet1.jpg",
+      "category": "SPA React",
+      "year": 2026,
+      "technologies": [
+        "Components",
+        "Lists",
+        "Conditional UI"
+      ],
+      "description": "Presentation finale du portfolio avec cartes dynamiques, detail de projet et interface de demonstration orientee soutenance."
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

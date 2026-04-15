@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4e1f78" />
+      <stop offset="1" stop-color="#f18a3d" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="480" rx="42" fill="url(#bg)" />
+  <rect x="290" y="54" width="220" height="372" rx="34" fill="#0f1424" />
+  <rect x="308" y="94" width="184" height="292" rx="26" fill="#ffffff" />
+  <rect x="336" y="130" width="128" height="18" rx="9" fill="#dfe4f4" />
+  <rect x="336" y="166" width="76" height="76" rx="18" fill="#ffdbbf" />
+  <rect x="424" y="166" width="40" height="12" rx="6" fill="#6736ff" />
+  <rect x="424" y="188" width="54" height="12" rx="6" fill="#6736ff" opacity="0.75" />
+  <rect x="336" y="268" width="142" height="14" rx="7" fill="#dfe4f4" />
+  <rect x="336" y="296" width="118" height="14" rx="7" fill="#dfe4f4" />
+  <rect x="336" y="332" width="110" height="34" rx="17" fill="#6df0ae" />
+  <text x="92" y="392" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="38" font-weight="700">Responsive Mobile UI</text>
+</svg>

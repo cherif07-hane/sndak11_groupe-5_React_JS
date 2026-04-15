@@ -1,0 +1,37 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="206" y1="74" x2="1380" y2="812" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAF1FF"/>
+      <stop offset="1" stop-color="#8EB3FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="590" y="122" width="744" height="494" rx="26" fill="#F8FBFF" stroke="#D6E4FF" stroke-width="10"/>
+  <rect x="646" y="174" width="640" height="336" rx="14" fill="#F1F6FF"/>
+  <path d="M714 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M780 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M846 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M912 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M978 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M1044 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M1110 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M1176 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M1242 210V482" stroke="#CADBFF" stroke-width="6"/>
+  <path d="M666 262H1220" stroke="#D6E4FF" stroke-width="6"/>
+  <path d="M666 316H1220" stroke="#D6E4FF" stroke-width="6"/>
+  <path d="M666 370H1220" stroke="#D6E4FF" stroke-width="6"/>
+  <path d="M666 424H1220" stroke="#D6E4FF" stroke-width="6"/>
+  <rect x="764" y="238" width="264" height="18" rx="9" fill="#7CC6FF"/>
+  <rect x="866" y="292" width="224" height="18" rx="9" fill="#4D95F2"/>
+  <rect x="932" y="346" width="188" height="18" rx="9" fill="#3D75D5"/>
+  <rect x="996" y="400" width="170" height="18" rx="9" fill="#204EAA"/>
+  <rect x="1048" y="454" width="126" height="18" rx="9" fill="#183B84"/>
+  <circle cx="304" cy="382" r="146" fill="#FFFFFF" fill-opacity="0.68"/>
+  <circle cx="304" cy="382" r="86" fill="#D7E8FF"/>
+  <path d="M244 468H384" stroke="#7AAFFF" stroke-width="20" stroke-linecap="round"/>
+  <path d="M304 296V388" stroke="#7AAFFF" stroke-width="18" stroke-linecap="round"/>
+  <path d="M304 388L372 452" stroke="#7AAFFF" stroke-width="18" stroke-linecap="round"/>
+  <rect x="730" y="626" width="454" height="36" rx="18" fill="#BFD3F8"/>
+  <rect x="818" y="676" width="278" height="36" rx="18" fill="#9DBAF2"/>
+  <text x="150" y="736" fill="#16305E" font-family="Trebuchet MS, Arial" font-size="66" font-weight="700">Planning Vision</text>
+</svg>

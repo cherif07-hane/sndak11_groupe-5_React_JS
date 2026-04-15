@@ -1,0 +1,27 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="72" y1="50" x2="1510" y2="834" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A203E"/>
+      <stop offset="1" stop-color="#122B52"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <path d="M118 160H454" stroke="#5FC7FF" stroke-width="8" stroke-linecap="round" opacity="0.35"/>
+  <path d="M118 232H526" stroke="#5FC7FF" stroke-width="8" stroke-linecap="round" opacity="0.28"/>
+  <path d="M118 304H416" stroke="#5FC7FF" stroke-width="8" stroke-linecap="round" opacity="0.22"/>
+  <path d="M120 560H440" stroke="#5FC7FF" stroke-width="8" stroke-linecap="round" opacity="0.26"/>
+  <path d="M120 632H492" stroke="#5FC7FF" stroke-width="8" stroke-linecap="round" opacity="0.2"/>
+  <path d="M118 704H388" stroke="#5FC7FF" stroke-width="8" stroke-linecap="round" opacity="0.18"/>
+  <rect x="940" y="182" width="430" height="512" rx="34" fill="#0C1830" fill-opacity="0.46" stroke="#406FC6" stroke-width="8"/>
+  <path d="M1155 246L1286 300V396C1286 480 1235 555 1155 592C1075 555 1024 480 1024 396V300L1155 246Z" fill="#163566" stroke="#8BE1FF" stroke-width="10"/>
+  <path d="M1100 400L1140 440L1216 352" stroke="#F6FBFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="724" cy="372" r="108" fill="#DCEAFF"/>
+  <circle cx="724" cy="328" r="44" fill="#A7C8FF"/>
+  <path d="M646 474C668 426 702 402 724 402C746 402 780 426 802 474" fill="#A7C8FF"/>
+  <circle cx="932" cy="382" r="96" fill="#EAF3FF"/>
+  <circle cx="932" cy="344" r="40" fill="#AFCFFF"/>
+  <path d="M862 474C882 432 910 410 932 410C954 410 982 432 1002 474" fill="#AFCFFF"/>
+  <path d="M616 568H1054" stroke="#89CCFF" stroke-width="10" stroke-linecap="round" opacity="0.42"/>
+  <path d="M602 622H1070" stroke="#89CCFF" stroke-width="10" stroke-linecap="round" opacity="0.28"/>
+  <text x="640" y="772" fill="#F4F9FF" font-family="Trebuchet MS, Arial" font-size="62" font-weight="700">Cyber Audit Console</text>
+</svg>

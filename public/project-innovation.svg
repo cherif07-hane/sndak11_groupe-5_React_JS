@@ -1,0 +1,32 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="158" y1="72" x2="1448" y2="796" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9F6FF"/>
+      <stop offset="1" stop-color="#12213D"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(798 380) rotate(90) scale(214 214)">
+      <stop stop-color="#FFF2CC"/>
+      <stop offset="1" stop-color="#FFF2CC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="798" cy="380" r="214" fill="url(#glow)"/>
+  <path d="M798 176C904 176 990 262 990 368C990 437 953 497 898 530L870 636H726L698 530C643 497 606 437 606 368C606 262 692 176 798 176Z" fill="#F7F1E3" fill-opacity="0.18" stroke="#F4F9FF" stroke-width="12"/>
+  <path d="M744 636H852" stroke="#F4F9FF" stroke-width="16" stroke-linecap="round"/>
+  <path d="M756 678H840" stroke="#F4F9FF" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="470" cy="310" r="58" fill="#213D6B" fill-opacity="0.78" stroke="#F4F9FF" stroke-width="8"/>
+  <path d="M438 310H502" stroke="#F4F9FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M470 278V342" stroke="#F4F9FF" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="1096" cy="300" r="58" fill="#20345B" fill-opacity="0.8" stroke="#F4F9FF" stroke-width="8"/>
+  <path d="M1096 268L1120 316L1068 316L1096 268Z" fill="#F4F9FF"/>
+  <circle cx="1186" cy="520" r="58" fill="#1B2F58" fill-opacity="0.82" stroke="#F4F9FF" stroke-width="8"/>
+  <path d="M1152 538C1172 510 1197 497 1222 490" stroke="#F4F9FF" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="404" cy="560" r="58" fill="#21416F" fill-opacity="0.8" stroke="#F4F9FF" stroke-width="8"/>
+  <path d="M370 560H438" stroke="#F4F9FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M404 526V594" stroke="#F4F9FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M528 310C620 310 661 330 706 360" stroke="#B4E4FF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M888 360C944 324 989 304 1038 300" stroke="#B4E4FF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M858 520C980 508 1084 528 1128 538" stroke="#B4E4FF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M708 520C596 534 474 560 462 560" stroke="#B4E4FF" stroke-width="8" stroke-linecap="round"/>
+  <text x="134" y="792" fill="#F4F9FF" font-family="Trebuchet MS, Arial" font-size="66" font-weight="700">Innovation Produit Hub</text>
+</svg>
