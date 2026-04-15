@@ -39,3 +39,4 @@ function DetaillerProjet({ project, onCancel, onEdit }) {
   </section> 
   )
 }
+export default DetaillerProjet
