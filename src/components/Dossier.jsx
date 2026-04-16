@@ -94,3 +94,24 @@ function Dossier({ mode }) {
       return searchableValue.includes(query);
     });
   })();
+  async function handleAddProject(formValues) {
+    try {
+      setIsSubmitting(true);
+      setErrorMessage("");
+
+      const payload = toProjectPayload(formValues);
+      console.log("payload envoyé:", payload);
+
+      const createdProject = await createProject(payload);
+
+      setProjects((currentProjects) => [createdProject, ...currentProjects]);
+      navigate("/projets");
+    } catch (error) {
+      console.error("Erreur ajout projet:", error);
+      setErrorMessage(
+        "L ajout a echoue. Verifie que l API json-server est bien demarree.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
