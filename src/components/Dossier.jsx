@@ -9,12 +9,14 @@ import {
 import AjouterProjet from "./AjouterProjet.jsx";
 import DetaillerProjet from "./DetaillerProjet.jsx";
 import Projet from "./Projet.jsx";
+
 function normalizeTechnologies(value) {
   return String(value ?? "")
     .split(",")
     .map((technology) => technology.trim())
     .filter(Boolean);
 }
+
 function toProjectPayload(formValues) {
   return {
     title: String(formValues.title ?? "").trim(),
@@ -25,6 +27,7 @@ function toProjectPayload(formValues) {
     description: String(formValues.description ?? "").trim(),
   };
 }
+
 function Dossier({ mode }) {
   const navigate = useNavigate();
   const { projectId } = useParams();
@@ -67,9 +70,11 @@ function Dossier({ mode }) {
       ignore = true;
     };
   }, []);
+
   useEffect(() => {
     setIsEditing(false);
   }, [mode, projectId]);
+
   const selectedProject = projects.find(
     (project) => String(project.id) === String(projectId),
   );
@@ -94,6 +99,7 @@ function Dossier({ mode }) {
       return searchableValue.includes(query);
     });
   })();
+
   async function handleAddProject(formValues) {
     try {
       setIsSubmitting(true);
@@ -115,6 +121,7 @@ function Dossier({ mode }) {
       setIsSubmitting(false);
     }
   }
+
   async function handleUpdateProject(formValues) {
     if (!selectedProject) {
       return;
@@ -150,6 +157,7 @@ function Dossier({ mode }) {
       setIsSubmitting(false);
     }
   }
+
   async function handleDeleteProject(id) {
     const confirmDelete = window.confirm(
       "Voulez-vous vraiment supprimer ce projet ?",
@@ -176,3 +184,186 @@ function Dossier({ mode }) {
       );
     }
   }
+
+  if (mode === "ajouter") {
+    return (
+      <section className="page-stack">
+        <section className="panel page-banner">
+          <p className="section-label">AjouterProjet</p>
+          <h2>Ajouter un nouveau projet au portfolio</h2>
+          <p>
+            Cette page est reservee au formulaire d ajout. Elle met en avant les
+            champs controles, les evenements et la soumission vers le serveur.
+          </p>
+        </section>
+
+        {errorMessage ? <div className="message">{errorMessage}</div> : null}
+
+        <AjouterProjet
+          isSubmitting={isSubmitting}
+          submitLabel="Ajouter le projet"
+          title="Formulaire d ajout"
+          onSubmit={handleAddProject}
+        />
+      </section>
+    );
+  }
+
+  if (mode === "details") {
+    if (loading) {
+      return <div className="status">Chargement du projet...</div>;
+    }
+
+    if (errorMessage) {
+      return <div className="message">{errorMessage}</div>;
+    }
+
+    if (!selectedProject) {
+      return (
+        <section className="page-stack">
+          <section className="panel help-panel">
+            <p className="section-label">DetaillerProjet</p>
+            <h2>Projet introuvable</h2>
+            <p>
+              Le projet demande n existe plus. Reviens a la page Projets pour
+              selectionner un autre element.
+            </p>
+            <div className="helper-actions">
+              <Link className="button" to="/projets">
+                Retour aux projets
+              </Link>
+            </div>
+          </section>
+        </section>
+      );
+    }
+
+    if (isEditing) {
+      return (
+        <section className="page-stack">
+          <section className="panel page-banner">
+            <p className="section-label">Edition</p>
+            <h2>Modifier le projet selectionne</h2>
+            <p>
+              Cette page reutilise le composant AjouterProjet pour mettre a jour
+              les informations du projet.
+            </p>
+          </section>
+
+          {errorMessage ? <div className="message">{errorMessage}</div> : null}
+
+          <AjouterProjet
+            initialValues={selectedProject}
+            isSubmitting={isSubmitting}
+            submitLabel="Enregistrer les modifications"
+            title="Formulaire d edition"
+            onCancel={() => setIsEditing(false)}
+            onSubmit={handleUpdateProject}
+          />
+        </section>
+      );
+    }
+
+    return (
+      <section className="detail-page">
+        <DetaillerProjet
+          project={selectedProject}
+          onCancel={() => navigate("/projets")}
+          onEdit={() => setIsEditing(true)}
+        />
+
+        <aside className="panel support-panel">
+          <p className="section-label">Informations</p>
+          <h3>Resume du projet</h3>
+          <p>
+            Les informations detaillees viennent du composant DetaillerProjet.
+            Cette page montre aussi le routage dynamique avec l identifiant du
+            projet.
+          </p>
+
+          <div className="support-list">
+            {selectedProject.technologies.map((technology) => (
+              <span key={technology} className="chip">
+                {technology}
+              </span>
+            ))}
+          </div>
+
+          <div className="helper-actions">
+            <Link className="button-secondary" to="/projets">
+              Retour aux projets
+            </Link>
+          </div>
+        </aside>
+      </section>
+    );
+  }
+
+  return (
+    <section className="page-stack">
+      <section className="panel page-banner">
+        <div className="section-heading">
+          <div>
+            <p className="section-label">Dossier</p>
+            <h2>Liste des projets</h2>
+            <p>
+              Clique sur le libelle d un projet pour ouvrir une page de detail.
+            </p>
+          </div>
+
+          <div className="helper-actions">
+            <Link className="button" to="/ajouter">
+              Ajouter un projet
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="panel search-panel">
+        <div className="search-head">
+          <div>
+            <p className="section-label">Recherche</p>
+            <h3>
+              {filteredProjects.length} projet(s) affiche(s) sur{" "}
+              {projects.length}
+            </h3>
+          </div>
+        </div>
+
+        <div className="search-box">
+          <label htmlFor="searchProject">
+            Rechercher un projet
+            <input
+              id="searchProject"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Titre, categorie, technologie..."
+              type="search"
+            />
+          </label>
+        </div>
+      </section>
+
+      {loading ? <div className="status">Chargement des projets...</div> : null}
+      {errorMessage ? <div className="message">{errorMessage}</div> : null}
+
+      {!loading && filteredProjects.length === 0 ? (
+        <div className="panel empty-state">
+          Aucun projet ne correspond a la recherche en cours.
+        </div>
+      ) : null}
+
+      <div className="project-list">
+        {filteredProjects.map((project) => (
+          <Projet
+            key={project.id}
+            project={project}
+            onDelete={handleDeleteProject}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default Dossier;
