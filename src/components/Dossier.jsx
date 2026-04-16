@@ -150,3 +150,29 @@ function Dossier({ mode }) {
       setIsSubmitting(false);
     }
   }
+  async function handleDeleteProject(id) {
+    const confirmDelete = window.confirm(
+      "Voulez-vous vraiment supprimer ce projet ?",
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    try {
+      setErrorMessage("");
+      await deleteProject(id);
+      setProjects((currentProjects) =>
+        currentProjects.filter((project) => String(project.id) !== String(id)),
+      );
+
+      if (String(projectId) === String(id)) {
+        navigate("/projets");
+      }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(
+        "La suppression a echoue. Verifie que l API json-server est bien demarree.",
+      );
+    }
+  }
