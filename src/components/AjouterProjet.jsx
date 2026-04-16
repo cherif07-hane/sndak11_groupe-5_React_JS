@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
 
-const DEFAULT_YEAR = new Date().getFullYear();
-
 const EMPTY_FORM = {
   title: "",
   image: "",
   category: "",
-  year: String(DEFAULT_YEAR),
+  year: "2026",
   technologies: "",
   description: "",
 };
 
 function toFormValues(project) {
-  if (!project) return EMPTY_FORM;
+  if (!project) {
+    return EMPTY_FORM;
+  }
 
   return {
     title: project.title ?? "",
     image: project.image ?? "",
     category: project.category ?? "",
-    year: String(project.year ?? DEFAULT_YEAR),
+    year: String(project.year ?? "2026"),
     technologies: Array.isArray(project.technologies)
       ? project.technologies.join(", ")
-      : (project.technologies ?? ""),
+      : "",
     description: project.description ?? "",
   };
 }
@@ -31,15 +31,6 @@ function parseTechnologies(value) {
     .split(",")
     .map((t) => t.trim())
     .filter(Boolean);
-}
-
-function readFileAsDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new Error("Impossible de lire le fichier."));
-    reader.readAsDataURL(file);
-  });
 }
 
 function AjouterProjet({
@@ -89,17 +80,13 @@ function AjouterProjet({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    try {
-      const imageDataUrl = await readFileAsDataUrl(file);
+    // juste pour affichage local (preview)
+    const imageUrl = URL.createObjectURL(file);
 
-      setFormValues((currentValues) => ({
-        ...currentValues,
-        image: imageDataUrl,
-      }));
-    } catch (err) {
-      console.error(err);
-      setError("Impossible de lire l'image.");
-    }
+    setFormValues((currentValues) => ({
+      ...currentValues,
+      image: imageUrl,
+    }));
   }
 
   return (
