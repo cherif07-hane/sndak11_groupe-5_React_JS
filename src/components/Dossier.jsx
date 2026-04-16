@@ -9,3 +9,9 @@ import {
 import AjouterProjet from "./AjouterProjet.jsx";
 import DetaillerProjet from "./DetaillerProjet.jsx";
 import Projet from "./Projet.jsx";
+function normalizeTechnologies(value) {
+  return String(value ?? "")
+    .split(",")
+    .map((technology) => technology.trim())
+    .filter(Boolean);
+}
