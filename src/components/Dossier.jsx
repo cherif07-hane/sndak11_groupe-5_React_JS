@@ -1,88 +1,89 @@
-import { Link, useNavigate, useParams } from 'react-router'
-import { useEffect, useState } from 'react'
-import AjouterProjet from './AjouterProjet.jsx'
-import DetaillerProjet from './DetaillerProjet.jsx'
-import Projet from './Projet.jsx'
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
 import {
   createProject,
   deleteProject,
   fetchProjects,
   updateProject,
-} from '../services/projectsApi.js'
+} from "../services/projectsApi.js";
+import AjouterProjet from "./AjouterProjet.jsx";
+import DetaillerProjet from "./DetaillerProjet.jsx";
+import Projet from "./Projet.jsx";
 
 function normalizeTechnologies(value) {
-  return value
-    .split(',')
+  return String(value ?? "")
+    .split(",")
     .map((technology) => technology.trim())
-    .filter(Boolean)
+    .filter(Boolean);
 }
 
 function toProjectPayload(formValues) {
   return {
-    title: formValues.title.trim(),
-    image: formValues.image.trim(),
-    category: formValues.category.trim(),
-    year: Number(formValues.year) || formValues.year,
+    title: String(formValues.title ?? "").trim(),
+    image: String(formValues.image ?? "").trim(),
+    category: String(formValues.category ?? "").trim(),
+    year: Number(formValues.year),
     technologies: normalizeTechnologies(formValues.technologies),
-    description: formValues.description.trim(),
-  }
+    description: String(formValues.description ?? "").trim(),
+  };
 }
 
 function Dossier({ mode }) {
-  const navigate = useNavigate()
-  const { projectId } = useParams()
-  const [projects, setProjects] = useState([])
-  const [searchTerm, setSearchTerm] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
+  const navigate = useNavigate();
+  const { projectId } = useParams();
+  const [projects, setProjects] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    let ignore = false
+    let ignore = false;
 
     async function loadProjects() {
       try {
-        setLoading(true)
-        setErrorMessage('')
-        const data = await fetchProjects()
+        setLoading(true);
+        setErrorMessage("");
+        const data = await fetchProjects();
 
         if (!ignore) {
-          setProjects(data)
+          setProjects(data);
         }
-      } catch {
+      } catch (error) {
+        console.error(error);
         if (!ignore) {
           setErrorMessage(
             "Impossible de charger les projets. Lance d abord l API avec 'npm run api'.",
-          )
+          );
         }
       } finally {
         if (!ignore) {
-          setLoading(false)
+          setLoading(false);
         }
       }
     }
 
-    loadProjects()
+    loadProjects();
 
     return () => {
-      ignore = true
-    }
-  }, [])
+      ignore = true;
+    };
+  }, []);
 
   useEffect(() => {
-    setIsEditing(false)
-  }, [mode, projectId])
+    setIsEditing(false);
+  }, [mode, projectId]);
 
   const selectedProject = projects.find(
     (project) => String(project.id) === String(projectId),
-  )
+  );
 
   const filteredProjects = (() => {
-    const query = searchTerm.trim().toLowerCase()
+    const query = searchTerm.trim().toLowerCase();
 
     if (!query) {
-      return projects
+      return projects;
     }
 
     return projects.filter((project) => {
@@ -90,88 +91,101 @@ function Dossier({ mode }) {
         project.title,
         project.category,
         project.description,
-        project.technologies.join(' '),
+        project.technologies.join(" "),
       ]
-        .join(' ')
-        .toLowerCase()
+        .join(" ")
+        .toLowerCase();
 
-      return searchableValue.includes(query)
-    })
-  })()
+      return searchableValue.includes(query);
+    });
+  })();
 
   async function handleAddProject(formValues) {
     try {
-      setIsSubmitting(true)
-      setErrorMessage('')
-      const createdProject = await createProject(toProjectPayload(formValues))
-      setProjects((currentProjects) => [createdProject, ...currentProjects])
-      navigate('/projets')
-    } catch {
+      setIsSubmitting(true);
+      setErrorMessage("");
+
+      const payload = toProjectPayload(formValues);
+      console.log("payload envoyé:", payload);
+
+      const createdProject = await createProject(payload);
+
+      setProjects((currentProjects) => [createdProject, ...currentProjects]);
+      navigate("/projets");
+    } catch (error) {
+      console.error("Erreur ajout projet:", error);
       setErrorMessage(
         "L ajout a echoue. Verifie que l API json-server est bien demarree.",
-      )
+      );
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
   async function handleUpdateProject(formValues) {
     if (!selectedProject) {
-      return
+      return;
     }
 
     try {
-      setIsSubmitting(true)
-      setErrorMessage('')
+      setIsSubmitting(true);
+      setErrorMessage("");
+
+      const payload = toProjectPayload(formValues);
+
       const updatedProject = await updateProject(selectedProject.id, {
         ...selectedProject,
-        ...toProjectPayload(formValues),
-      })
+        ...payload,
+      });
 
       setProjects((currentProjects) =>
         currentProjects.map((project) =>
-          project.id === updatedProject.id ? updatedProject : project,
+          String(project.id) === String(updatedProject.id)
+            ? updatedProject
+            : project,
         ),
-      )
+      );
 
-      setIsEditing(false)
-      navigate(`/projets/${updatedProject.id}`)
-    } catch {
+      setIsEditing(false);
+      navigate(`/projets/${updatedProject.id}`);
+    } catch (error) {
+      console.error(error);
       setErrorMessage(
         "La modification a echoue. Verifie que l API json-server est bien demarree.",
-      )
+      );
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
   async function handleDeleteProject(id) {
     const confirmDelete = window.confirm(
-      'Voulez-vous vraiment supprimer ce projet ?',
-    )
+      "Voulez-vous vraiment supprimer ce projet ?",
+    );
 
     if (!confirmDelete) {
-      return
+      return;
     }
 
     try {
-      setErrorMessage('')
-      await deleteProject(id)
+      setErrorMessage("");
+      await deleteProject(id);
       setProjects((currentProjects) =>
-        currentProjects.filter((project) => project.id !== id),
-      )
+        currentProjects.filter((project) => String(project.id) !== String(id)),
+      );
 
       if (String(projectId) === String(id)) {
-        navigate('/projets')
+        navigate("/projets");
       }
-    } catch {
+    } catch (error) {
+      console.error(error);
       setErrorMessage(
         "La suppression a echoue. Verifie que l API json-server est bien demarree.",
-      )
+      );
     }
   }
 
-  if (mode === 'ajouter') {
+  if (mode === "ajouter") {
     return (
       <section className="page-stack">
         <section className="panel page-banner">
@@ -192,16 +206,16 @@ function Dossier({ mode }) {
           onSubmit={handleAddProject}
         />
       </section>
-    )
+    );
   }
 
-  if (mode === 'details') {
+  if (mode === "details") {
     if (loading) {
-      return <div className="status">Chargement du projet...</div>
+      return <div className="status">Chargement du projet...</div>;
     }
 
     if (errorMessage) {
-      return <div className="message">{errorMessage}</div>
+      return <div className="message">{errorMessage}</div>;
     }
 
     if (!selectedProject) {
@@ -221,7 +235,7 @@ function Dossier({ mode }) {
             </div>
           </section>
         </section>
-      )
+      );
     }
 
     if (isEditing) {
@@ -247,14 +261,14 @@ function Dossier({ mode }) {
             onSubmit={handleUpdateProject}
           />
         </section>
-      )
+      );
     }
 
     return (
       <section className="detail-page">
         <DetaillerProjet
           project={selectedProject}
-          onCancel={() => navigate('/projets')}
+          onCancel={() => navigate("/projets")}
           onEdit={() => setIsEditing(true)}
         />
 
@@ -282,7 +296,7 @@ function Dossier({ mode }) {
           </div>
         </aside>
       </section>
-    )
+    );
   }
 
   return (
@@ -310,7 +324,8 @@ function Dossier({ mode }) {
           <div>
             <p className="section-label">Recherche</p>
             <h3>
-              {filteredProjects.length} projet(s) affiche(s) sur {projects.length}
+              {filteredProjects.length} projet(s) affiche(s) sur{" "}
+              {projects.length}
             </h3>
           </div>
         </div>
@@ -340,11 +355,15 @@ function Dossier({ mode }) {
 
       <div className="project-list">
         {filteredProjects.map((project) => (
-          <Projet key={project.id} project={project} onDelete={handleDeleteProject} />
+          <Projet
+            key={project.id}
+            project={project}
+            onDelete={handleDeleteProject}
+          />
         ))}
       </div>
     </section>
-  )
+  );
 }
 
-export default Dossier
+export default Dossier;

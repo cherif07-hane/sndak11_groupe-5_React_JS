@@ -1,39 +1,36 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
 const EMPTY_FORM = {
-  title: '',
-  image: '',
-  category: '',
-  year: '2026',
-  technologies: '',
-  description: '',
-}
+  title: "",
+  image: "",
+  category: "",
+  year: "2026",
+  technologies: "",
+  description: "",
+};
 
 function toFormValues(project) {
   if (!project) {
-    return EMPTY_FORM
+    return EMPTY_FORM;
   }
 
   return {
-    title: project.title ?? '',
-    image: project.image ?? '',
-    category: project.category ?? '',
-    year: String(project.year ?? '2026'),
+    title: project.title ?? "",
+    image: project.image ?? "",
+    category: project.category ?? "",
+    year: String(project.year ?? "2026"),
     technologies: Array.isArray(project.technologies)
-      ? project.technologies.join(', ')
-      : '',
-    description: project.description ?? '',
-  }
+      ? project.technologies.join(", ")
+      : "",
+    description: project.description ?? "",
+  };
 }
 
-function readFileAsDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-
-    reader.onload = () => resolve(String(reader.result))
-    reader.onerror = () => reject(new Error('Impossible de lire le fichier.'))
-    reader.readAsDataURL(file)
-  })
+function parseTechnologies(value) {
+  return value
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
 }
 
 function AjouterProjet({
@@ -44,38 +41,52 @@ function AjouterProjet({
   submitLabel,
   title,
 }) {
-  const [formValues, setFormValues] = useState(toFormValues(initialValues))
+  const [formValues, setFormValues] = useState(() =>
+    toFormValues(initialValues),
+  );
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setFormValues(toFormValues(initialValues))
-  }, [initialValues])
+    setFormValues(toFormValues(initialValues));
+  }, [initialValues]);
 
   function handleChange(event) {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setFormValues((currentValues) => ({
       ...currentValues,
       [name]: value,
-    }))
+    }));
   }
 
   function handleSubmit(event) {
-    event.preventDefault()
-    onSubmit(formValues)
+    event.preventDefault();
+    setError(null);
+
+    try {
+      const payload = {
+        ...formValues,
+        year: Number(formValues.year),
+        technologies: parseTechnologies(formValues.technologies),
+      };
+
+      onSubmit(payload);
+    } catch (err) {
+      console.error(err);
+      setError("Erreur lors de la soumission");
+    }
   }
 
   async function handleImageUpload(event) {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    if (!file) {
-      return
-    }
-
-    const imageDataUrl = await readFileAsDataUrl(file)
+    // juste pour affichage local (preview)
+    const imageUrl = URL.createObjectURL(file);
 
     setFormValues((currentValues) => ({
       ...currentValues,
-      image: imageDataUrl,
-    }))
+      image: imageUrl,
+    }));
   }
 
   return (
@@ -86,6 +97,8 @@ function AjouterProjet({
         Renseigne le libelle, l image, la categorie, l annee, les technologies
         et la description du projet.
       </p>
+
+      {error && <p className="form-error">{error}</p>}
 
       <form className="form-grid" onSubmit={handleSubmit}>
         <label htmlFor="title">
@@ -118,7 +131,6 @@ function AjouterProjet({
             value={formValues.image}
             onChange={handleChange}
             placeholder="/project-portfolio.svg"
-            required
           />
         </label>
 
@@ -151,6 +163,9 @@ function AjouterProjet({
             <input
               id="year"
               name="year"
+              type="number"
+              min="2000"
+              max="2100"
               value={formValues.year}
               onChange={handleChange}
               placeholder="2026"
@@ -185,18 +200,22 @@ function AjouterProjet({
 
         <div className="button-row">
           <button className="button" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Enregistrement...' : submitLabel}
+            {isSubmitting ? "Enregistrement..." : submitLabel}
           </button>
 
           {onCancel ? (
-            <button className="button-secondary" type="button" onClick={onCancel}>
+            <button
+              className="button-secondary"
+              type="button"
+              onClick={onCancel}
+            >
               Annuler
             </button>
           ) : null}
         </div>
       </form>
     </section>
-  )
+  );
 }
 
-export default AjouterProjet
+export default AjouterProjet;
