@@ -34,6 +34,7 @@ function Dossier({ mode }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
   useEffect(() => {
     let ignore = false;
 
@@ -66,3 +67,6 @@ function Dossier({ mode }) {
       ignore = true;
     };
   }, []);
+  useEffect(() => {
+    setIsEditing(false);
+  }, [mode, projectId]);
