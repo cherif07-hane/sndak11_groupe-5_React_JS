@@ -25,3 +25,12 @@ function toProjectPayload(formValues) {
     description: String(formValues.description ?? "").trim(),
   };
 }
+function Dossier({ mode }) {
+  const navigate = useNavigate();
+  const { projectId } = useParams();
+  const [projects, setProjects] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
