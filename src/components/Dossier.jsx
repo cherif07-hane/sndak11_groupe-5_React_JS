@@ -115,3 +115,38 @@ function Dossier({ mode }) {
       setIsSubmitting(false);
     }
   }
+  async function handleUpdateProject(formValues) {
+    if (!selectedProject) {
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setErrorMessage("");
+
+      const payload = toProjectPayload(formValues);
+
+      const updatedProject = await updateProject(selectedProject.id, {
+        ...selectedProject,
+        ...payload,
+      });
+
+      setProjects((currentProjects) =>
+        currentProjects.map((project) =>
+          String(project.id) === String(updatedProject.id)
+            ? updatedProject
+            : project,
+        ),
+      );
+
+      setIsEditing(false);
+      navigate(`/projets/${updatedProject.id}`);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(
+        "La modification a echoue. Verifie que l API json-server est bien demarree.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
