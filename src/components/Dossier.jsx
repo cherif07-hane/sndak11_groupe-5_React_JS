@@ -70,3 +70,27 @@ function Dossier({ mode }) {
   useEffect(() => {
     setIsEditing(false);
   }, [mode, projectId]);
+  const selectedProject = projects.find(
+    (project) => String(project.id) === String(projectId),
+  );
+
+  const filteredProjects = (() => {
+    const query = searchTerm.trim().toLowerCase();
+
+    if (!query) {
+      return projects;
+    }
+
+    return projects.filter((project) => {
+      const searchableValue = [
+        project.title,
+        project.category,
+        project.description,
+        project.technologies.join(" "),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return searchableValue.includes(query);
+    });
+  })();
