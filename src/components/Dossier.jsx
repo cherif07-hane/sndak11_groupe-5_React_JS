@@ -34,3 +34,35 @@ function Dossier({ mode }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadProjects() {
+      try {
+        setLoading(true);
+        setErrorMessage("");
+        const data = await fetchProjects();
+
+        if (!ignore) {
+          setProjects(data);
+        }
+      } catch (error) {
+        console.error(error);
+        if (!ignore) {
+          setErrorMessage(
+            "Impossible de charger les projets. Lance d abord l API avec 'npm run api'.",
+          );
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadProjects();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
