@@ -1,99 +1,45 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
+
+const DEFAULT_YEAR = new Date().getFullYear();
 
 const EMPTY_FORM = {
-  title: '',
-  image: '',
-  category: '',
-  year: '2026',
-  technologies: '',
-  description: '',
-}
-
-const YEAR_MIN = 1900
-const YEAR_MAX = 2100
-const MIN_DESCRIPTION_LENGTH = 20
-const MAX_IMAGE_SIZE_BYTES = 2 * 1024 * 1024
-const ALLOWED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-  'image/gif',
-  'image/svg+xml',
-]
+  title: "",
+  image: "",
+  category: "",
+  year: String(DEFAULT_YEAR),
+  technologies: "",
+  description: "",
+};
 
 function toFormValues(project) {
-  if (!project) {
-    return EMPTY_FORM
-  }
+  if (!project) return EMPTY_FORM;
 
   return {
-    title: project.title ?? '',
-    image: project.image ?? '',
-    category: project.category ?? '',
-    year: String(project.year ?? '2026'),
+    title: project.title ?? "",
+    image: project.image ?? "",
+    category: project.category ?? "",
+    year: String(project.year ?? DEFAULT_YEAR),
     technologies: Array.isArray(project.technologies)
-      ? project.technologies.join(', ')
-      : '',
-    description: project.description ?? '',
-  }
+      ? project.technologies.join(", ")
+      : (project.technologies ?? ""),
+    description: project.description ?? "",
+  };
 }
 
 function parseTechnologies(value) {
   return value
-    .split(',')
-    .map((technology) => technology.trim())
-    .filter(Boolean)
-}
-
-function validateForm(values) {
-  const errors = {}
-  const year = values.year.trim()
-  const yearAsNumber = Number(year)
-  const technologies = parseTechnologies(values.technologies)
-  const description = values.description.trim()
-
-  if (!values.title.trim()) {
-    errors.title = 'Le libelle du projet est obligatoire.'
-  }
-
-  if (!values.image.trim()) {
-    errors.image = "L'URL ou le chemin de l'image est obligatoire."
-  }
-
-  if (!values.category.trim()) {
-    errors.category = 'La categorie est obligatoire.'
-  }
-
-  if (!year) {
-    errors.year = "L'annee est obligatoire."
-  } else if (!Number.isInteger(yearAsNumber) || year.length !== 4) {
-    errors.year = "L'annee doit contenir 4 chiffres."
-  } else if (yearAsNumber < YEAR_MIN || yearAsNumber > YEAR_MAX) {
-    errors.year = `L'annee doit etre comprise entre ${YEAR_MIN} et ${YEAR_MAX}.`
-  }
-
-  if (technologies.length === 0) {
-    errors.technologies =
-      'Ajoute au moins une technologie (separee par des virgules).'
-  }
-
-  if (!description) {
-    errors.description = 'La description est obligatoire.'
-  } else if (description.length < MIN_DESCRIPTION_LENGTH) {
-    errors.description = `La description doit contenir au moins ${MIN_DESCRIPTION_LENGTH} caracteres.`
-  }
-
-  return errors
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
 }
 
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-
-    reader.onload = () => resolve(String(reader.result))
-    reader.onerror = () => reject(new Error('Impossible de lire le fichier.'))
-    reader.readAsDataURL(file)
-  })
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("Impossible de lire le fichier."));
+    reader.readAsDataURL(file);
+  });
 }
 
 function AjouterProjet({
@@ -104,94 +50,55 @@ function AjouterProjet({
   submitLabel,
   title,
 }) {
-  const [formValues, setFormValues] = useState(toFormValues(initialValues))
-  const [formErrors, setFormErrors] = useState({})
-  const [uploadError, setUploadError] = useState('')
-  const [isReadingImage, setIsReadingImage] = useState(false)
+  const [formValues, setFormValues] = useState(() =>
+    toFormValues(initialValues),
+  );
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setFormValues(toFormValues(initialValues))
-    setFormErrors({})
-    setUploadError('')
-  }, [initialValues])
+    setFormValues(toFormValues(initialValues));
+  }, [initialValues]);
 
   function handleChange(event) {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setFormValues((currentValues) => ({
       ...currentValues,
       [name]: value,
-    }))
-
-    setFormErrors((currentErrors) => {
-      if (!currentErrors[name]) {
-        return currentErrors
-      }
-
-      const { [name]: _removedError, ...nextErrors } = currentErrors
-      return nextErrors
-    })
-
-    if (name === 'image') {
-      setUploadError('')
-    }
+    }));
   }
 
   function handleSubmit(event) {
-    event.preventDefault()
-    const validationErrors = validateForm(formValues)
+    event.preventDefault();
+    setError(null);
 
-    setFormErrors(validationErrors)
+    try {
+      const payload = {
+        ...formValues,
+        year: Number(formValues.year),
+        technologies: parseTechnologies(formValues.technologies),
+      };
 
-    if (Object.keys(validationErrors).length > 0) {
-      return
+      onSubmit(payload);
+    } catch (err) {
+      console.error(err);
+      setError("Erreur lors de la soumission");
     }
-
-    onSubmit(formValues)
   }
 
   async function handleImageUpload(event) {
-    const file = event.target.files?.[0]
-
-    if (!file) {
-      return
-    }
-
-    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-      setUploadError(
-        "Format non supporte. Utilise JPG, PNG, WEBP, GIF ou SVG.",
-      )
-      return
-    }
-
-    if (file.size > MAX_IMAGE_SIZE_BYTES) {
-      setUploadError('Image trop lourde. Taille maximale: 2 MB.')
-      return
-    }
+    const file = event.target.files?.[0];
+    if (!file) return;
 
     try {
-      setIsReadingImage(true)
-      setUploadError('')
-      const imageDataUrl = await readFileAsDataUrl(file)
+      const imageDataUrl = await readFileAsDataUrl(file);
 
       setFormValues((currentValues) => ({
         ...currentValues,
         image: imageDataUrl,
-      }))
-
-      setFormErrors((currentErrors) => {
-        if (!currentErrors.image) {
-          return currentErrors
-        }
-
-        const { image: _removedError, ...nextErrors } = currentErrors
-        return nextErrors
-      })
-    } catch {
-      setUploadError(
-        "Impossible de charger l'image. Essaie un autre fichier ou une URL.",
-      )
-    } finally {
-      setIsReadingImage(false)
+      }));
+    } catch (err) {
+      console.error(err);
+      setError("Impossible de lire l'image.");
     }
   }
 
@@ -204,24 +111,19 @@ function AjouterProjet({
         et la description du projet.
       </p>
 
-      <form className="form-grid" onSubmit={handleSubmit}>
-        {Object.keys(formErrors).length > 0 ? (
-          <p className="form-alert">Corrige les champs en erreur puis reessaie.</p>
-        ) : null}
+      {error && <p className="form-error">{error}</p>}
 
+      <form className="form-grid" onSubmit={handleSubmit}>
         <label htmlFor="title">
           Libelle du projet
           <input
             id="title"
             name="title"
-            aria-invalid={Boolean(formErrors.title)}
             value={formValues.title}
             onChange={handleChange}
             placeholder="Ex : Application de gestion de portfolio"
+            required
           />
-          {formErrors.title ? (
-            <span className="field-error">{formErrors.title}</span>
-          ) : null}
         </label>
 
         <label htmlFor="imageFile">
@@ -232,7 +134,6 @@ function AjouterProjet({
             onChange={handleImageUpload}
             type="file"
           />
-          {uploadError ? <span className="field-error">{uploadError}</span> : null}
         </label>
 
         <label htmlFor="image">
@@ -240,14 +141,10 @@ function AjouterProjet({
           <input
             id="image"
             name="image"
-            aria-invalid={Boolean(formErrors.image)}
             value={formValues.image}
             onChange={handleChange}
             placeholder="/project-portfolio.svg"
           />
-          {formErrors.image ? (
-            <span className="field-error">{formErrors.image}</span>
-          ) : null}
         </label>
 
         {formValues.image ? (
@@ -267,14 +164,11 @@ function AjouterProjet({
             <input
               id="category"
               name="category"
-              aria-invalid={Boolean(formErrors.category)}
               value={formValues.category}
               onChange={handleChange}
               placeholder="SPA React"
+              required
             />
-            {formErrors.category ? (
-              <span className="field-error">{formErrors.category}</span>
-            ) : null}
           </label>
 
           <label htmlFor="year">
@@ -282,15 +176,14 @@ function AjouterProjet({
             <input
               id="year"
               name="year"
-              aria-invalid={Boolean(formErrors.year)}
+              type="number"
+              min="2000"
+              max="2100"
               value={formValues.year}
               onChange={handleChange}
               placeholder="2026"
-              inputMode="numeric"
+              required
             />
-            {formErrors.year ? (
-              <span className="field-error">{formErrors.year}</span>
-            ) : null}
           </label>
         </div>
 
@@ -299,14 +192,11 @@ function AjouterProjet({
           <input
             id="technologies"
             name="technologies"
-            aria-invalid={Boolean(formErrors.technologies)}
             value={formValues.technologies}
             onChange={handleChange}
             placeholder="React, CSS, JSON Server"
+            required
           />
-          {formErrors.technologies ? (
-            <span className="field-error">{formErrors.technologies}</span>
-          ) : null}
         </label>
 
         <label htmlFor="description">
@@ -314,38 +204,31 @@ function AjouterProjet({
           <textarea
             id="description"
             name="description"
-            aria-invalid={Boolean(formErrors.description)}
             value={formValues.description}
             onChange={handleChange}
             placeholder="Decrire le projet, son objectif et ses fonctionnalites."
+            required
           />
-          {formErrors.description ? (
-            <span className="field-error">{formErrors.description}</span>
-          ) : null}
         </label>
 
         <div className="button-row">
-          <button
-            className="button"
-            type="submit"
-            disabled={isSubmitting || isReadingImage}
-          >
-            {isSubmitting
-              ? 'Enregistrement...'
-              : isReadingImage
-                ? 'Traitement image...'
-                : submitLabel}
+          <button className="button" type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Enregistrement..." : submitLabel}
           </button>
 
           {onCancel ? (
-            <button className="button-secondary" type="button" onClick={onCancel}>
+            <button
+              className="button-secondary"
+              type="button"
+              onClick={onCancel}
+            >
               Annuler
             </button>
           ) : null}
         </div>
       </form>
     </section>
-  )
+  );
 }
 
-export default AjouterProjet
+export default AjouterProjet;
