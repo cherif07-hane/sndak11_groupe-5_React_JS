@@ -15,3 +15,13 @@ function normalizeTechnologies(value) {
     .map((technology) => technology.trim())
     .filter(Boolean);
 }
+function toProjectPayload(formValues) {
+  return {
+    title: String(formValues.title ?? "").trim(),
+    image: String(formValues.image ?? "").trim(),
+    category: String(formValues.category ?? "").trim(),
+    year: Number(formValues.year),
+    technologies: normalizeTechnologies(formValues.technologies),
+    description: String(formValues.description ?? "").trim(),
+  };
+}
